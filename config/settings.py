@@ -37,18 +37,18 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'greenbooks',
     'common.apps.CommonConfig',
-    'community',  # 커뮤니티
-    'tradebook',
-    'custom',
-    'mypage',
-    'ckeditor',  # 폼편집기
-    'ckeditor_uploader',  # 폼편집기
-    'checkbookprice',  # 바코드리더
-    'goods',
-    'shopcart',
-    'django.contrib.humanize', # 원화표시(gdetail)
+    'greenbooks',
+    'mypage',           # 마이페이지
+    'shopcart',         # 장바구니
+    'goods',            # 중고책구매
+    'tradebook',        # 중고책직거래
+    'checkbookprice',   # 바코드리더
+    'community',        # 커뮤니티
+    'custom',           # 고객센터
+    'ckeditor',             # 폼편집기
+    'ckeditor_uploader',    # 폼편집기
+    'django.contrib.humanize',  # 원화표시(gdetail)
 ]
 
 MIDDLEWARE = [

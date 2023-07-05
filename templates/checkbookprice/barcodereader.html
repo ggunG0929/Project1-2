@@ -1,49 +1,97 @@
 {% extends 'base.html' %}
+{% load static %}
+{%block title%} - 바코드검색{%endblock%}
+{% load humanize %}     <!-- 원화표시 포맷팅을 위해 -->
 {% block content %}
-<div class="container">
-    <div style="text-align:center;">
-    <h1 class="my-3">바코드로 책 찾기</h1>
-        <hr>
-    {% if title %}
-    {% else %}
-        <div class="my-3">
+<div class="container px-4 py-5">
+    <!-- 공지사항 영역 -->
+    <div id="announcement">
+        <h2 class="pb-2 border-bottom">바코드검색</h2>
+        <strong><p style="font-size:0.75rem; color:#ac2c38b5">
+            갖고 계신 책의 바코드를 통해<br>
+            알라딘 서점과 그린 24 내의 관련 정보들을 확인하세요
+        </p></strong>
+    </div>
+    <section id="barcode_reader">
+    <!-- 타이틀 정보가 없는 경우(바코드 정보 검색 전) -->
+    {% if not title %}
+        <div class="my-3 text-center">
             <form method="POST" class="post-form" enctype="multipart/form-data">
                 {% csrf_token %}
+                {% include 'form_errors.html' %}
                 {{ form.image }}
-                <div style="width:400px; height:400px; margin:30px auto;"><img id="tempImage" src=""></div>
-                <button type="submit" class="save btn btn-primary my-3" value="upload">찾기</button>
+                <button type="submit" class="save btn btn-primary" value="upload">검색</button>
+                <div style="margin:30px auto;">
+                    <!-- 자바스크립트(파일미리보기) 위해 id, src 지정 -->
+                    <img id="tempImage" src="">
+                </div>
             </form>
         </div>
-    {% endif %}
-    {% if title %}
-        <div class="my-3">
-            <img src="{{cover}}">
-            <table class="table my-3 table-bordered">
-                <tr>
-                    <td><h2>{{title}}</h2></td>
-                </tr>
-                    <tr><td><h4>판매가 : {{price}}</h4></td></tr>
-                    <tr><td><h4>정가 : {{pricestandard}}</h4></td></tr>
-                    <tr><td><a href="{{link}}">알라딘 판매처 링크</a></td></tr>
-                    <tr><td><h2>isbn : {{isbn13}}</h2></td></tr>
-            </table>
+    <!-- 타이틀 정보가 있는 경우(바코드 정보 검색 후) -->
+    {% else %}
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <table class="table">
+                    <tr>
+                        <td rowspan="4">
+                            <div>
+                                <img src="{{ cover }}" style="width: 250px;">
+                            </div>
+                        </td>
+                        <td class="text-start"><h4>{{ title }}</h4></td>
+                    </tr>
+                    <tr>
+                        <td class="text-start pt-3">
+                            새도서(알라딘) <s>{{ pricestandard|intcomma }}원</s>
+                            <i class="fa-solid fa-arrow-right"></i>
+                            <span class="lead">{{ price|intcomma }}원</span>
+                            <a href="{{link}}" target="_blank">
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-start pt-3">{{ author }}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-start pt-3">{{ description }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="row text-center">
+            <h5>사이트내 검색 결과</h5>
+            {% if post_list %}
+            <p>{{ post_count }}건</p>
+            <div class="col-lg-4">
+                <p>중고서적구매</p>
+            </div>
+            <div class="col-lg-4">
+                <p>중고책직거래</p>
+            </div>
+            <div class="col-lg-4">
+                <p>커뮤니티</p>
+            </div>
+            {% else %}
+            <p>검색 결과가 없습니다.</p>
+            {% endif %}
         </div>
     {% endif %}
-    </div>
+    </section>
 </div>
+{% endblock %}
+{% block script %}
 <script>
- function imageView(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-
-            reader.onload = function(e) {
-                $('#tempImage').attr('src', e.target.result)
-                 .width(400)
-                 .height(400);
-            }
-
-            reader.readAsDataURL(input.files[0]);
+// 이미지 파일 미리보기
+function imageView(input) {
+    if (input.files && input.files[0]) {        // 파일리스트가 있는지 + 리스트에 첫번째 파일 존재하는지(유효성검사)
+        var reader = new FileReader();
+        reader.onload = function(e) {           // 파일을 읽어오면
+            $('#tempImage').attr('src', e.target.result)    // 미리보기
+                .width(400).height(400);        // 이미지크기 제한
         }
+        reader.readAsDataURL(input.files[0]);   // 리스트 첫파일을 읽어오고 파일의 내용을 URL형식으로 변환
     }
+}
 </script>
 {% endblock %}

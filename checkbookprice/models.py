@@ -1,17 +1,16 @@
-import os
+import string
+from random import choice
 
 from django.db import models
-from django.conf import settings
-# Create your models here.
 
-def user_path(instance, filename): #파라미터 instance는 Photo 모델을 의미 filename은 업로드 된 파일의 파일 이름
-    from random import choice
-    import string # string.ascii_letters : ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz
-    arr = [choice(string.ascii_letters) for _ in range(8)]
-    pid = ''.join(arr) # 8자리 임의의 문자를 만들어 파일명으로 지정
-    extension = filename.split('.')[-1] # 배열로 만들어 마지막 요소를 추출하여 파일확장자로 지정
-    # file will be uploaded to MEDIA_ROOT/user_<id>/<random>
-    return '%s.%s' % (pid, extension) # 예 : wayhome/abcdefgs.png
+
+# photo의 이미지 파일 저장방식(이왕이면 충돌,중복,보안,관리 측면에서 해주는 것이 좋음)
+def user_path(instance, filename):  # 파라미터 instance는 Photo모델을 의미, filename은 업로드 된 파일의 이름
+    arr = [choice(string.ascii_letters) for _ in range(8)]  # string.ascii_letters에서 랜덤추출해서 리스트에 저장 * 8
+    random_string = ''.join(arr)  # 8개 값을 가진 리스트에서 모든 값을 이어 8자리 임의의 문자 만들기
+    ext = filename.split('.')[-1]       # filename의 확장자 추출
+    return f'{random_string}.{ext}'     # 이미지파일의 저장명: random_string.ext
+
 
 class Photo(models.Model):
-    image = models.ImageField(upload_to = user_path) # 어디로 업로드 할지 지정
+    image = models.ImageField(upload_to=user_path)  # 이미지를 user_path로 업로드. 위에서 먼저 만들어줘야 함

@@ -3,7 +3,6 @@
     <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
       <a id="myLogo"
         href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
-       <!-- <img src="{% static 'greenbooks/images/Green24.jpg' %}" alt = "로고" width="100%">-->
         <img src="{% static 'greenbooks/images/logo_4.jpg' %}" alt = "로고" >
       </a>
       <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
@@ -11,7 +10,7 @@
         onclick="location.href='{% url 'index' %}'">홈</a></li>
         <li><a href="{% url 'goods:goods' %}" class="nav-link px-2 link-dark">구매하기</a></li>
         <li><a href="{% url 'tradebook:tradebook_list' %}" class="nav-link px-2 link-dark">중고책거래</a></li>
-        <li><a href="{% url 'price:barcodereader' %}" class="nav-link px-2 link-dark">바코드로 책찾기</a></li>
+        <li><a href="{% url 'price:barcodereader' %}" class="nav-link px-2 link-dark">바코드검색</a></li>
         <li><a href="{% url 'community:community' %}" class="nav-link px-2 link-dark">커뮤니티</a></li>
         <li><a href="{% url 'custom:qnalist' %}" class="nav-link px-2 link-dark">고객센터</a></li>
       </ul>
